@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+
+# REVERSE PROXY
+  auth:
+    image: nginx
+    ports:
+      - "80:8080"
+      #- "8080:8080"
+      - "8081:80"
+    links:
+      - webapp
+    volumes:
+    - "./reverseproxy/auth.conf:/etc/nginx/conf.d/auth.conf"
+    - "./reverseproxy/auth.htpasswd:/etc/nginx/auth.htpasswd"
+    environment:
+      USER: "test"
+      PASS: "test"
+
+  # WERWOLF ONLINE GAME
+  webapp:
+    image: werwolfonline
+    depends_on:
+      - db
+    #ports:
+    #  - 8080:8080
+
+  # DB: MYSQL DATABASE
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: werwolf
+      MYSQL_USER: werwolf
+      MYSQL_PASSWORD: oi3uhb6n
+      MYSQL_ROOT_PASSWORD: oi3uhb6nj6zg7vbh9gt
